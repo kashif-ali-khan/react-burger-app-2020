@@ -4,6 +4,7 @@ import classes from './ContactData.css';
 import axios from './../../../axiosOrder';
 import Loader from './../../../components/UI/Spinner/Spinner';
 import Input from './../../../components/UI/Input/Input';
+import { connect } from 'react-redux';
 class ContactData extends Component {
 
     state = {
@@ -17,6 +18,10 @@ class ContactData extends Component {
                     type: 'text',
                     placeholder: 'Your Name'
                 },
+                validation: {
+                    required: true
+                },
+                valid: false,
                 value: ''
             },
             street: {
@@ -25,6 +30,10 @@ class ContactData extends Component {
                     type: 'text',
                     placeholder: 'Street'
                 },
+                validation: {
+                    required: true
+                },
+                valid: false,
                 value: ''
             },
             zipCode: {
@@ -33,6 +42,10 @@ class ContactData extends Component {
                     type: 'text',
                     placeholder: 'ZIP Code'
                 },
+                validation: {
+                    required: true
+                },
+                valid: false,
                 value: ''
             },
             country: {
@@ -41,6 +54,10 @@ class ContactData extends Component {
                     type: 'text',
                     placeholder: 'Country'
                 },
+                validation: {
+                    required: true
+                },
+                valid: false,
                 value: ''
             },
             email: {
@@ -49,6 +66,10 @@ class ContactData extends Component {
                     type: 'email',
                     placeholder: 'Your E-Mail'
                 },
+                validation: {
+                    required: true
+                },
+                valid: false,
                 value: ''
             },
             deliveryMethod: {
@@ -59,9 +80,12 @@ class ContactData extends Component {
                         { value: 'cheapest', displayValue: 'Cheapest' }
                     ]
                 },
-                value: ''
+                valid: true,
+                validation: {},
+                value: 'fastest'
             }
         },
+        isFormValid: false
     }
 
     componentDidMount() {
@@ -77,8 +101,8 @@ class ContactData extends Component {
             formData[item] = this.state.orderForm[item].value
         }
         const orderData = {
-            ingredients: this.state.ingredients,
-            price: this.state.totalCost,
+            ingredients: this.props.ings,
+            price: this.props.price,
             orderData: formData
 
         }
@@ -107,7 +131,6 @@ class ContactData extends Component {
         this.setState({
             orderForm: updatedContactForm
         })
-        //console.log(event.target.value)
 
     }
     render() {
@@ -162,5 +185,11 @@ class ContactData extends Component {
         )
     }
 }
+const mapStateToProps = state => {
+    return {
+        ings: state.ingredients,
+        price: state.totalCost
+    }
+}
 
-export default ContactData;
+export default connect(mapStateToProps)(ContactData);
