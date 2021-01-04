@@ -86,7 +86,7 @@ export const saveOrder = (orderData, token) => {
         dispatch(isOrderSaving(true))
         axios.post("orders.json?auth=" + token, orderData)
             .then(response => {
-                console.log(response)
+                //console.log(response)
                 dispatch(saveOrderSuccess(response.data))
             }).catch(error => {
                 dispatch(saveOrderFailed(error))

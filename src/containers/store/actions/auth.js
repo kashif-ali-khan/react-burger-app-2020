@@ -35,7 +35,7 @@ export const auth = (username, password, isSignUp) => {
         }
         axios.post(url, dataObject)
             .then(response => {
-                console.log(response)
+                //console.log(response)
                 const idtoken = response.data.idToken;
                 const expirationDate = new Date(new Date().getTime() + response.data.expiresIn * 1000);
                 const userid = response.data.localId;
