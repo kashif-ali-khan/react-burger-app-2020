@@ -38,12 +38,18 @@ export const auth = (username, password, isSignUp) => {
                 console.log(response)
                 const idtoken = response.data.idToken;
                 const userid = response.data.localId;
-                dispatch(authSuccess(userid,idtoken))
+                dispatch(authSuccess(userid, idtoken))
             })
             .catch(error => {
-              const message = error.response.data.error.message;
-               // console.log(error.resopnse.data.error.message);
+                const message = error.response.data.error.message;
+                // console.log(error.resopnse.data.error.message);
                 dispatch(authFail(message))
             })
+    }
+}
+
+export const logout = () => {
+    return {
+        type: actionTypes.LOGOUT
     }
 }
