@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Redirect } from 'react-router-dom';
 import CheckoutSummary from './../../components/Order/CheckoutSummary/CheckoutSummary';
 import ContactData from './ContactData/ContactData';
 import { connect } from 'react-redux';
@@ -36,14 +36,19 @@ class Checkout extends Component {
         this.props.history.push("/checkout/contact-data");
     }
     render() {
+        let form = <Redirect to="/" />
+        if (this.props.ings) {
+            form = (
+                <CheckoutSummary
+                    cancelled={this.cancelHandler}
+                    contiued={this.continueHandler}
+                    ingredients={this.props.ings}
+                />
+            )
+        }
         return (
             <Fragment>
-                { this.props.ings ?
-                    <CheckoutSummary
-                        cancelled={this.cancelHandler}
-                        contiued={this.continueHandler}
-                        ingredients={this.props.ings}
-                    /> : null}
+                {form}
                 <Route
                     path={this.props.match.url + "/contact-data"}
                     component={ContactData}

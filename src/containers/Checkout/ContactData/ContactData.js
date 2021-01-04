@@ -5,6 +5,8 @@ import axios from './../../../axiosOrder';
 import Loader from './../../../components/UI/Spinner/Spinner';
 import Input from './../../../components/UI/Input/Input';
 import { connect } from 'react-redux';
+
+import { saveOrder } from './../../store/actions';
 class ContactData extends Component {
 
     state = {
@@ -109,19 +111,20 @@ class ContactData extends Component {
         this.setState({
             isLoading: true
         });
-        axios.post("orders.json", orderData)
-            .then(response => {
-                console.log(response)
-                this.setState({
-                    isLoading: false
-                })
-                this.props.history.push("/orders");
-            }).catch(error => {
-                console.log(error);
-                this.setState({
-                    isLoading: false
-                })
-            })
+        this.props.saveOrderHandler(orderData);
+        // axios.post("orders.json", orderData)
+        //     .then(response => {
+        //         console.log(response)
+        //         this.setState({
+        //             isLoading: false
+        //         })
+        //         this.props.history.push("/orders");
+        //     }).catch(error => {
+        //         console.log(error);
+        //         this.setState({
+        //             isLoading: false
+        //         })
+        //     })
     }
     inputChangeHandler = (event, identifier) => {
         const updatedContactForm = { ...this.state.orderForm };
@@ -143,7 +146,7 @@ class ContactData extends Component {
             })
         }
         let form = null;
-        if (this.state.isLoading) {
+        if (this.props.isLoading) {
             form = <Loader />;
 
         } else {
@@ -188,8 +191,16 @@ class ContactData extends Component {
 const mapStateToProps = state => {
     return {
         ings: state.ingredients,
-        price: state.totalCost
+        price: state.totalCost,
+        isLoading: state.isLoading,
+        orderData: state.orders
     }
 }
 
-export default connect(mapStateToProps)(ContactData);
+const mapDispatchToProps = dispatch => {
+    return {
+        saveOrderHandler: (orderData) => dispatch(saveOrder(orderData))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ContactData);
