@@ -59,7 +59,7 @@ class Checkout extends Component {
 }
 const mapStateToProps = state => {
     return {
-        ings: state.ingredients
+        ings: state.burger.ingredients
     }
 }
 export default connect(mapStateToProps)(Checkout);

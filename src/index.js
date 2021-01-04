@@ -4,13 +4,19 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
-import { createStore, applyMiddleware, compose } from "redux";
+import { createStore, applyMiddleware, compose, combineReducers } from "redux";
 import { Provider } from "react-redux";
-import Reducers from './containers/store/reducers';
+import burgerReducer from './containers/store/reducers';
 import thunk from 'redux-thunk';
+
+import authReducer from './containers/store/reducers/auth';
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-const store = createStore(Reducers, composeEnhancers(applyMiddleware(thunk)));
+const rootReducer = combineReducers({
+  burger: burgerReducer,
+  auth: authReducer
+})
+const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>

@@ -4,13 +4,14 @@ import axios from './../../axiosOrder';
 import Loader from './../../components/UI/Spinner/Spinner';
 import { connect } from 'react-redux';
 import { fetchOrders } from './../store/actions';
+import withErrorHandler from './../../hoc/withErrorHandler';
 class Orders extends Component {
 
     state = {
         orders: null
     }
     componentDidMount() {
-        this.props.loadOrders();
+        this.props.loadOrders(this.props.token);
         // axios.get('/orders.json').then(response => {
         //     const orders = [];
         //     for (let item in response.data) {
@@ -43,13 +44,14 @@ class Orders extends Component {
 
 const mapPropsToState = state => {
     return {
-        orders: state.fetchOrders
+        orders: state.burger.fetchOrders,
+        token:state.auth.idToken
     }
 }
 
 const mapPropsToDispatch = dispatch => {
     return {
-        loadOrders: () => dispatch(fetchOrders())
+        loadOrders: (token) => dispatch(fetchOrders(token))
     }
 }
-export default connect(mapPropsToState, mapPropsToDispatch)(Orders);
+export default connect(mapPropsToState, mapPropsToDispatch)(withErrorHandler(Orders,axios));

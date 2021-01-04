@@ -81,10 +81,10 @@ export const isOrderSaving = (state) => {
 
 
 
-export const saveOrder = (orderData) => {
+export const saveOrder = (orderData,token) => {
     return dispatch => {
         dispatch(isOrderSaving(true))
-        axios.post("orders.json", orderData)
+        axios.post("orders.json?auth="+token, orderData)
             .then(response => {
                 console.log(response)
                 dispatch(saveOrderSuccess(response.data))
@@ -107,10 +107,10 @@ export const fetchOrderStart = () => {
     }
 }
 
-export const fetchOrders = () => {
+export const fetchOrders = (token) => {
     return dispatch => {
         dispatch(fetchOrderStart())
-        axios.get('/orders.json').then(response => {
+        axios.get('/orders.json?auth='+token).then(response => {
             const orders = [];
             for (let item in response.data) {
                 orders.push({

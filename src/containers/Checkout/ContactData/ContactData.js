@@ -111,7 +111,7 @@ class ContactData extends Component {
         this.setState({
             isLoading: true
         });
-        this.props.saveOrderHandler(orderData);
+        this.props.saveOrderHandler(orderData, this.props.token);
         // axios.post("orders.json", orderData)
         //     .then(response => {
         //         console.log(response)
@@ -190,16 +190,17 @@ class ContactData extends Component {
 }
 const mapStateToProps = state => {
     return {
-        ings: state.ingredients,
-        price: state.totalCost,
-        isLoading: state.isLoading,
-        orderData: state.orders
+        ings: state.burger.ingredients,
+        price: state.burger.totalCost,
+        isLoading: state.burger.isLoading,
+        orderData: state.burger.orders,
+        token: state.auth.idToken
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        saveOrderHandler: (orderData) => dispatch(saveOrder(orderData))
+        saveOrderHandler: (orderData, token) => dispatch(saveOrder(orderData, token))
     }
 }
 
