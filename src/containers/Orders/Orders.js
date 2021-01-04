@@ -11,7 +11,7 @@ class Orders extends Component {
         orders: null
     }
     componentDidMount() {
-        this.props.loadOrders(this.props.token);
+        this.props.loadOrders(this.props.token, this.props.userId);
         // axios.get('/orders.json').then(response => {
         //     const orders = [];
         //     for (let item in response.data) {
@@ -35,9 +35,7 @@ class Orders extends Component {
                 />))
 
         }
-        return (
-            OrderString
-        )
+        return OrderString;
     }
 
 }
@@ -45,13 +43,14 @@ class Orders extends Component {
 const mapPropsToState = state => {
     return {
         orders: state.burger.fetchOrders,
-        token:state.auth.idToken
+        token: state.auth.idToken,
+        userId: state.auth.userId
     }
 }
 
 const mapPropsToDispatch = dispatch => {
     return {
-        loadOrders: (token) => dispatch(fetchOrders(token))
+        loadOrders: (token,userid) => dispatch(fetchOrders(token,userid))
     }
 }
-export default connect(mapPropsToState, mapPropsToDispatch)(withErrorHandler(Orders,axios));
+export default connect(mapPropsToState, mapPropsToDispatch)(withErrorHandler(Orders, axios));

@@ -9,7 +9,7 @@ import Loader from './../../components/UI/Spinner/Spinner';
 import withErrorHandler from './../../hoc/withErrorHandler';
 
 import { connect } from 'react-redux';
-import { addIngredient, removeIngredient,initIngredient } from './../store/actions';
+import { addIngredient, removeIngredient, initIngredient } from './../store/actions';
 
 const INGREDIENT_PRICES = {
     salad: 0.5,
@@ -56,6 +56,7 @@ class BurgerBuilder extends Component {
                         price={this.props.totalCost}
                         purchasable={this.updatePurchaseState(this.props.ings)}
                         orderSummary={this.purchaseHandler}
+                        isAuth={this.props.isAuth}
 
                     />
                 </Aux>
@@ -83,6 +84,7 @@ class BurgerBuilder extends Component {
         );
     }
     purchaseHandler = () => {
+        
         this.setState({
             purchase: true
         })
@@ -148,7 +150,8 @@ const mapStateToProps = state => {
     return {
         ings: state.burger.ingredients,
         totalCost: state.burger.totalCost,
-        error:state.burger.error
+        error: state.burger.error,
+        isAuth: state.auth.idToken !== null
     }
 
 }

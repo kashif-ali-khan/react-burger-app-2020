@@ -2,22 +2,40 @@ import React, { Component } from 'react';
 import Layout from './components/layout/Layout';
 import BurgerBuilder from './containers/BurgerBuilder/BurgerBuilder';
 import Checkout from './containers/Checkout/Checkout';
-import { Route } from 'react-router-dom';
+import { Route, Switch, withRouter, Redirect } from 'react-router-dom';
 import Orders from './containers/Orders/Orders';
 import Auth from './containers/Auth/Auth';
 import Logout from './containers/Auth/Logout/Logout';
+import { connect } from 'react-redux';
+import { checkReLogin } from './containers/store/actions/auth';
 class App extends Component {
-
+  componentDidMount() {
+    this.props.onRefreshLogin();
+  }
   render() {
+
+    let routes = (
+      <Switch>
+        <Route path="/auth" component={Auth} />
+        <Route path="/" exact component={BurgerBuilder} />
+        <Redirect to="." />
+      </Switch>
+    )
+    if (this.props.isAuthenticated) {
+      routes = (
+        <Switch>
+          <Route path="/orders" component={Orders} />
+          <Route path="/logout" component={Logout} />
+          <Route path="/checkout" component={Checkout} />
+          <Route path="/" exact component={BurgerBuilder} />
+          <Redirect to="." />
+        </Switch>
+      )
+    }
     return (
       <div>
         <Layout>
-          <Route path="/" exact component={BurgerBuilder} />
-          <Route path="/orders" component={Orders} />
-
-          <Route path="/checkout" component={Checkout} />
-          <Route path="/auth" component={Auth} />
-          <Route path="/logout" component={Logout} />
+          {routes}
           {/* <BurgerBuilder></BurgerBuilder>
           <Checkout /> */}
         </Layout>
@@ -25,5 +43,15 @@ class App extends Component {
     );
   }
 }
+const mapStateToProps = state => {
+  return {
+    isAuthenticated: state.auth.idToken !== null
+  };
+};
+const mapDispatchToProps = dispatch => {
+  return {
+    onRefreshLogin: () => dispatch(checkReLogin())
+  }
+}
 
-export default App;
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));
