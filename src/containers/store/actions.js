@@ -7,6 +7,8 @@ export const INIT_INGREDIENT = 'INIT_INGREDIENT';
 export const FETCH_INGREDIENT_FAILED = 'FETCH_INGREDIENT_FAILED';
 export const SET_INGREDIENT = 'SET_INGREDIENT';
 
+export const SET_FETCH_INGREDIENT = 'SET_FETCH_INGREDIENT';
+
 export const SAVE_ORDER = 'SAVE_ORDER';
 export const SAVE_ORDER_FAILED = 'SAVE_ORDER_FAILED';
 export const SAVE_ORDER_SUCCESS = 'SAVE_ORDER_SUCCESS';
@@ -49,13 +51,16 @@ export const fetchIngredientFailed = () => {
 
 
 export const initIngredient = () => {
-    return dispatch => {
-        axios.get('/ingredients.json').then(response => {
-            dispatch(setIngredient(response.data))
-        }).catch(error => {
-            dispatch(fetchIngredientFailed())
-        })
+    return {
+        type: SET_FETCH_INGREDIENT
     }
+    // return dispatch => {
+    //     axios.get('/ingredients.json').then(response => {
+    //         dispatch(setIngredient(response.data))
+    //     }).catch(error => {
+    //         dispatch(fetchIngredientFailed())
+    //     })
+    // }
 }
 
 export const saveOrderFailed = (error) => {
@@ -112,7 +117,7 @@ export const fetchOrders = (token, userId) => {
         dispatch(fetchOrderStart())
         //const qparam = "?auth=" + token + "&orderBy='userId'&equalTo='" + userId+"'"
 
-        const qparam = '?auth=' + token + '&orderBy="userId"&equalTo="' + userId+'"'
+        const qparam = '?auth=' + token + '&orderBy="userId"&equalTo="' + userId + '"'
         axios.get('/orders.json' + qparam).then(response => {
             const orders = [];
             for (let item in response.data) {
