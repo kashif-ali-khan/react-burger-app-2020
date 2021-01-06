@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Suspense } from 'react';
 import Layout from './components/layout/Layout';
 import BurgerBuilder from './containers/BurgerBuilder/BurgerBuilder';
 //import Checkout from './containers/Checkout/Checkout';
@@ -9,17 +9,17 @@ import Logout from './containers/Auth/Logout/Logout';
 import { connect } from 'react-redux';
 import { checkReLogin } from './containers/store/actions/auth';
 
-import asyncComponent from './hoc/AsyncComponent/AsyncComponent';
+//import asyncComponent from './hoc/AsyncComponent/AsyncComponent';
 
-const asyncCheckout = asyncComponent(() => {
+const Checkout = React.lazy(() => {
   return import('./containers/Checkout/Checkout');
 })
 
-const asyncAuth = asyncComponent(() => {
+const Auth = React.lazy(() => {
   return import('./containers/Auth/Auth');
 })
 
-const asyncOrder = asyncComponent(() => {
+const Orders = React.lazy(() => {
   return import('./containers/Orders/Orders');
 })
 class App extends Component {
@@ -30,7 +30,7 @@ class App extends Component {
 
     let routes = (
       <Switch>
-        <Route path="/auth" component={asyncAuth} />
+        <Route path="/auth" render={(props)=> <Auth {...props} />} />
         <Route path="/" exact component={BurgerBuilder} />
         <Redirect to="." />
       </Switch>
@@ -38,10 +38,10 @@ class App extends Component {
     if (this.props.isAuthenticated) {
       routes = (
         <Switch>
-          <Route path="/orders" component={asyncOrder} />
+          <Route path="/orders" render={(props)=><Orders {...props}/>} />
           <Route path="/logout" component={Logout} />
-          <Route path="/checkout" component={asyncCheckout} />
-          <Route path="/auth" component={asyncAuth} />
+          <Route path="/checkout" render={(props)=><Checkout {...props}/>} />
+          <Route path="/auth" render={(props)=><Auth {...props}/>} />
           <Route path="/" exact component={BurgerBuilder} />
           <Redirect to="." />
         </Switch>
@@ -50,7 +50,9 @@ class App extends Component {
     return (
       <div>
         <Layout>
+          <Suspense fallback={<p>Loading ....</p>}>
           {routes}
+          </Suspense>
           {/* <BurgerBuilder></BurgerBuilder>
           <Checkout /> */}
         </Layout>
